@@ -1,0 +1,88 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "django.fullname" . }}
+  labels:
+    app: {{ template "django.name" . }}
+    chart: {{ template "django.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "django.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "django.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: django
+              containerPort: 8000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: 8000
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: 8000
+            initialDelaySeconds: 15
+            timeoutSeconds: 1
+            periodSeconds: 15
+          env:
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "django.fullname" . }}
+                key: POSTGRES_USER
+
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "django.fullname" . }}
+                key: POSTGRES_PASSWORD
+
+          - name: POSTGRES_HOST
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "django.fullname" . }}
+                key: POSTGRES_HOST
+
+          - name: POSTGRES_DBNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "django.fullname" . }}
+                  key: POSTGRES_DBNAME
+
+          - name: DJANGO_APP_DB_ENGINE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "django.fullname" . }}
+                  key: DJANGO_APP_DB_ENGINE
+
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
