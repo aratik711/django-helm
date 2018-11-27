@@ -13,7 +13,7 @@ service:
   type: NodePort
   port: 8000
   targetPort: 8000
-  nodePort: 30008
+  nodePort: $apiExternalPort
 
 ingress:
   enabled: false
@@ -47,8 +47,8 @@ env:
   staticFiles: "/static/"
   djangoappLogLevel: "DEBUG"
   DJANGO_APP_DB_ENGINE: "postgresql_psycopg2"
-  POSTGRES_DBNAME: gitranger
-  POSTGRES_USER: gituser
-  POSTGRES_PASSWORD: "zqinehcMF95usc2k"
-  POSTGRES_HOST: gitranger-db-postgresql
+  POSTGRES_DBNAME: $postgresqlDatabase
+  POSTGRES_USER: $postgresqlUsername
+  POSTGRES_PASSWORD: "$postgresqlPassword"
+  POSTGRES_HOST: ${POSTGRESQL_CHART_NAME}-postgresql
   POSTGRES_PORT: "5432"

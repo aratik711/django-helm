@@ -51,15 +51,15 @@ securityContext:
   runAsUser: 1001
 
 replication:
-  enabled: true
+  enabled: $postgresqlReplication
   user: repl_user
   password: repl_password
   slaveReplicas: 1
 
 ## PostgreSQL admin user
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
-postgresqlUsername: gituser
-postgresqlPassword: zqinehcMF95usc2k
+postgresqlUsername: $postgresqlUsername
+postgresqlPassword: $postgresqlPassword
 
 ## PostgreSQL password
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
@@ -69,7 +69,7 @@ postgresqlPassword: zqinehcMF95usc2k
 ## Create a database
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
 ##
-postgresqlDatabase: gitranger
+postgresqlDatabase: $postgresqlDatabase
 
 ## PostgreSQL configuration
 ## Specify runtime configuration parameters as a dict, using camelCase, e.g.
