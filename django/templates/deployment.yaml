@@ -27,50 +27,36 @@ spec:
             - name: django
               containerPort: 8000
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /metrics
-              port: 8000
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
-            periodSeconds: 15
-          readinessProbe:
-            httpGet:
-              path: /metrics
-              port: 8000
-            initialDelaySeconds: 15
-            timeoutSeconds: 1
-            periodSeconds: 15
           env:
           - name: POSTGRES_USER
             valueFrom:
               secretKeyRef:
-                name: {{ template "django.fullname" . }}
+                name: django-credentials
                 key: POSTGRES_USER
 
           - name: POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: {{ template "django.fullname" . }}
+                name: django-credentials
                 key: POSTGRES_PASSWORD
 
           - name: POSTGRES_HOST
             valueFrom:
               secretKeyRef:
-                name: {{ template "django.fullname" . }}
+                name: django-credentials
                 key: POSTGRES_HOST
 
           - name: POSTGRES_DBNAME
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "django.fullname" . }}
-                  key: POSTGRES_DBNAME
+            valueFrom:
+              secretKeyRef:
+                name: django-credentials
+                key: POSTGRES_DBNAME
 
           - name: DJANGO_APP_DB_ENGINE
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "django.fullname" . }}
-                  key: DJANGO_APP_DB_ENGINE
+            valueFrom:
+              secretKeyRef:
+                name: django-credentials
+                key: DJANGO_APP_DB_ENGINE
 
           resources:
 {{ toYaml .Values.resources | indent 12 }}
