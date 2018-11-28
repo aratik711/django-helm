@@ -10,19 +10,19 @@ image:
   pullPolicy: Always
 
 service:
-  type: NodePort
+  type: ClusterIP
   port: 8000
   targetPort: 8000
-  nodePort: $apiExternalPort
+  #nodePort: $apiExternalPort
 
 ingress:
-  enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   path: /
   hosts:
-    - chart-example.local
+    - gitranger-api-django
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
@@ -52,3 +52,6 @@ env:
   POSTGRES_PASSWORD: "$postgresqlPassword"
   POSTGRES_HOST: ${POSTGRESQL_CHART_NAME}-postgresql
   POSTGRES_PORT: "5432"
+  apiUser: git
+  apiPassword: "Gituser@123"
+  apiEmail: gitranger@example.com

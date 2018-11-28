@@ -25,14 +25,14 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           livenessProbe:
             httpGet:
-              path: /metrics
+              path: /api/v1/metrics
               port: 8000
             initialDelaySeconds: 5
             timeoutSeconds: 1
             periodSeconds: 15
           readinessProbe:
             httpGet:
-              path: /metrics
+              path: /api/v1/metrics
               port: 8000
             initialDelaySeconds: 15
             timeoutSeconds: 1
@@ -41,6 +41,10 @@ spec:
             - name: django
               containerPort: 8000
               protocol: TCP
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", "/opt/git_ranger/post_install.sh"]
           env:
           - name: POSTGRES_USER
             valueFrom:
@@ -71,6 +75,15 @@ spec:
               secretKeyRef:
                 name: django-credentials
                 key: DJANGO_APP_DB_ENGINE
+
+          - name: staticFiles
+            value: {{ .Values.env.staticFiles }}
+          - name: apiUser
+            value: {{ .Values.env.apiUser }}
+          - name: apiEmail
+            value: {{ .Values.env.apiEmail }}
+          - name: apiPassword
+            value: {{ .Values.env.apiPassword }}
 
           resources:
 {{ toYaml .Values.resources | indent 12 }}

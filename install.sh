@@ -4,6 +4,7 @@ set -e
 
 export POSTGRESQL_CHART_NAME=gitranger-db
 export DJANGO_CHART_NAME=gitranger-api
+export NGINX_CHART_NAME=gitranger-proxy
 export NAMESPACE=gitranger
 
 ##### VARIABLES TO BE EDITED #################
@@ -52,6 +53,14 @@ envsubst < files/django-values.yaml > django/values.yaml
 helm install --name $DJANGO_CHART_NAME --namespace $NAMESPACE django
 
 kubectl rollout status deployment ${DJANGO_CHART_NAME}-django --namespace $NAMESPACE
+
+## Create Nginx deployment
+
+#envsubst < files/django-values.yaml > django/values.yaml
+
+helm install --name $NGINX_CHART_NAME --namespace $NAMESPACE nginx
+
+kubectl rollout status deployment ${DJANGO_CHART_NAME}-nginx --namespace $NAMESPACE
 
 }
 
