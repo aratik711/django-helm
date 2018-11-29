@@ -29,40 +29,51 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
-              port: http
+              path: /api/v1/metrics
+              port: 80
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 15
           readinessProbe:
             httpGet:
-              path: /
-              port: http
+              path: /api/v1/metrics
+              port: 80
+            initialDelaySeconds: 15
+            timeoutSeconds: 1
+            periodSeconds: 15
           volumeMounts:
-          - mountPath: /etc/nginx # mount nginx-conf volume to /etc/nginx
-            readOnly: true
-            name: nginx-conf
-          - mountPath: /var/log/nginx
-            name: log
-          volumes:
-          - name: nginx-conf
-            configMap:
-              name: nginx-conf # place ConfigMap `nginx-conf` on /etc/nginx
-              items:
-              - key: nginx.conf
-                path: nginx.conf
-              - key: virtualhost.conf
-                path: virtualhost/virtualhost.conf # dig directory
-          - name: log
-            emptyDir: {}
+            - name: {{ template "nginx.fullname" . }}-conf-vol
+              mountPath: /etc/nginx # mount nginx-conf volume to /etc/nginx
+            - name: {{ template "nginx.fullname" . }}-default-vol
+              mountPath: /etc/nginx/conf.d # mount nginx-conf volume to /etc/nginx
+            - name: log
+              mountPath: /var/log/nginx
           resources:
 {{ toYaml .Values.resources | indent 12 }}
-    {{- with .Values.nodeSelector }}
+      volumes:
+        - name: {{ template "nginx.fullname" . }}-conf-vol
+          configMap:
+            name: {{ template "nginx.fullname" . }}-conf # place ConfigMap `nginx-conf` on /etc/nginx
+            items:
+            - key: nginx.conf
+              path: nginx.conf
+        - name: {{ template "nginx.fullname" . }}-default-vol
+          configMap:
+            name: {{ template "nginx.fullname" . }}-default # place ConfigMap `nginx-conf` on /etc/nginx
+            items:
+            - key: default.conf
+              path: default.conf
+        - name: log
+          emptyDir: {}
+      {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.affinity }}
+      {{- end }}
+      {{- with .Values.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
+      {{- end }}
+      {{- with .Values.tolerations }}
       tolerations:
 {{ toYaml . | indent 8 }}
-    {{- end }}
+      {{- end }}

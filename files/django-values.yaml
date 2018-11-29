@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: aratik711/django
-  tag: 2.1
+  repository: $djangoImageName
+  tag: $djangoImageTag
   pullPolicy: Always
 
 service:
@@ -52,6 +52,6 @@ env:
   POSTGRES_PASSWORD: "$postgresqlPassword"
   POSTGRES_HOST: ${POSTGRESQL_CHART_NAME}-postgresql
   POSTGRES_PORT: "5432"
-  apiUser: git
-  apiPassword: "Gituser@123"
-  apiEmail: gitranger@example.com
+  apiUser: $apiUser
+  apiPassword: "$apiPassword"
+  apiEmail: $apiEmail
