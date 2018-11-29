@@ -15,7 +15,7 @@ class Service:
             g = Github(self.accesstoken)
             repo = g.get_repo(org + "/" + repo)
             pr = repo.get_pull(int(pr))
-            branch_name = pr.head.label.split(":")[1]
+            branch_name = pr.base.label.split(":")[1]
             branch = repo.get_branch(branch_name)
             if branch.protected:
                 pr_data.append(self.process_pr_data(repo, pr, branch, True))

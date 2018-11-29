@@ -9,7 +9,7 @@ RUN chmod +x /opt/git_ranger/entrypoint.sh && \
 
 RUN python3 -m pip install -r requirements.txt --no-cache-dir && \
     apk del --no-cache .build-deps && \
-    python3 manage.py collectstatic --noinputw
+    python3 manage.py collectstatic --noinput
 
 EXPOSE 8000
 ENTRYPOINT ["sh", "/opt/git_ranger/entrypoint.sh"]
