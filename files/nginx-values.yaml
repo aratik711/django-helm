@@ -5,15 +5,15 @@
 replicaCount: 1
 
 image:
-  repository: aratik711/nginx
-  tag: 1.15
+  repository: $nginxImageName
+  tag: $nginxImageTag
   pullPolicy: Always
 
 service:
   type: NodePort
   port: 80
   nodePort: $apiExternalPort
-  server_name: localhost
+  server_name: _
   host: ${DJANGO_CHART_NAME}-django
   gitPort: 8000
 

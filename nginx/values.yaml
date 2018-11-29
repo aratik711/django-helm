@@ -5,15 +5,15 @@
 replicaCount: 1
 
 image:
-  repository: nginx
-  tag: 1.15-alpine
+  repository: aratik711/nginx
+  tag: 1.15
   pullPolicy: Always
 
 service:
   type: NodePort
   port: 80
   nodePort: 30080
-  server_name: localhost
+  server_name: _
   host: gitranger-api-django
   gitPort: 8000
 

@@ -51,40 +51,31 @@ spec:
               secretKeyRef:
                 name: django-credentials
                 key: POSTGRES_USER
-
           - name: POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: django-credentials
                 key: POSTGRES_PASSWORD
-
           - name: POSTGRES_HOST
-            valueFrom:
-              secretKeyRef:
-                name: django-credentials
-                key: POSTGRES_HOST
-
+            value: {{ .Values.env.POSTGRES_HOST }}
           - name: POSTGRES_DBNAME
-            valueFrom:
-              secretKeyRef:
-                name: django-credentials
-                key: POSTGRES_DBNAME
-
+            value: {{ .Values.env.POSTGRES_DBNAME }}
+          - name: POSTGRES_PORT
+            value: "{{ .Values.env.POSTGRES_PORT }}"
           - name: DJANGO_APP_DB_ENGINE
+            value: {{ .Values.env.DJANGO_APP_DB_ENGINE }}
+          - name: apiUser
             valueFrom:
               secretKeyRef:
                 name: django-credentials
-                key: DJANGO_APP_DB_ENGINE
-
-          - name: staticFiles
-            value: {{ .Values.env.staticFiles }}
-          - name: apiUser
-            value: {{ .Values.env.apiUser }}
+                key: apiUser
           - name: apiEmail
             value: {{ .Values.env.apiEmail }}
           - name: apiPassword
-            value: {{ .Values.env.apiPassword }}
-
+            valueFrom:
+              secretKeyRef:
+                name: django-credentials
+                key: apiPassword
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}

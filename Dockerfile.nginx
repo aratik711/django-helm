@@ -2,4 +2,6 @@ FROM nginx:1.15-alpine
 
 COPY 40x.html /usr/share/nginx/html/
 COPY 50x.html /usr/share/nginx/html/
-COPY index.html /usr/share/nginx/html/ 
+COPY index.html /usr/share/nginx/html/
+COPY mime.types /etc/nginx/
+COPY git_ranger/static /usr/share/nginx/html/static

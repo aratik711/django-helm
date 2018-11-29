@@ -44,8 +44,6 @@ tolerations: []
 affinity: {}
 
 env:
-  staticFiles: "/static/"
-  djangoappLogLevel: "DEBUG"
   DJANGO_APP_DB_ENGINE: "postgresql_psycopg2"
   POSTGRES_DBNAME: $postgresqlDatabase
   POSTGRES_USER: $postgresqlUsername

@@ -89,6 +89,7 @@ read -p "Do you want to delete the deployments (y/n)? " yn
 case $yn in
    [Yy]* ) helm delete --purge  ${POSTGRESQL_CHART_NAME} ${DJANGO_CHART_NAME} ${NGINX_CHART_NAME} || true
            kubectl delete namespace $NAMESPACE
+           sleep 20
            echo "The deployments have been deleted"
            break;;
    * ) exit;;
@@ -110,7 +111,7 @@ elif [ -z $2 ]; then
   echo "Please pass the desired number of replicas for $1 deployment"
   exit 1
 
-elif [ $2 -ge 1 ]; then
+elif ! [ $2 -ge 1 ]; then
 
   echo "Please pass the desired number of replicas for $1 deployment greater than or equal to 1"
   exit 1
@@ -131,9 +132,9 @@ else
     exit 1
   fi
 
-  kubectl scale ${RESOURCE} ${DEPLOYMENT} --replicas=$2
+  kubectl scale ${RESOURCE} ${DEPLOYMENT} --namespace ${NAMESPACE} --replicas=$2
 
-  kubectl rollout status ${RESOURCE} ${DEPLOYMENT}
+  kubectl rollout status ${RESOURCE} ${DEPLOYMENT} --namespace ${NAMESPACE}
 
 fi
 

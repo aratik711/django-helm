@@ -24,11 +24,12 @@ data:
 
 
     server {
-        listen       {{ .Values.service.port }};
+        listen       {{ .Values.service.port }} default_server;
         server_name  {{ .Values.service.server_name }};
 
         #charset koi8-r;
-        #access_log  /var/log/nginx/host.access.log  main;
+        #access_log  /var/log/nginx/host.access.log;
+        error_log  /var/log/nginx/host.error.log;
 
         location @gitranger {
 
@@ -50,8 +51,13 @@ data:
         }
 
         location / {
-            try_files $uri @gitranger;
+            root   /usr/share/nginx/html;
+            index  index.html index.htm;
         }
+
+        location /static/ {
+                root /usr/share/nginx/html;
+         }
 
         location /admin/ {
          try_files $uri @gitranger;
@@ -67,6 +73,11 @@ data:
         #
         error_page   500 502 503 504  /50x.html;
         location = /50x.html {
+            root   /usr/share/nginx/html;
+        }
+
+        error_page   404  /40x.html;
+        location = /40x.html {
             root   /usr/share/nginx/html;
         }
 
