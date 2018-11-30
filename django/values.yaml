@@ -5,9 +5,9 @@
 replicaCount: 1
 
 image:
-  repository: aratik711/django
+  repository: arati/django
   tag: 2.1
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
 
 service:
   type: ClusterIP
@@ -16,7 +16,7 @@ service:
   #nodePort: 30080
 
 ingress:
-  enabled: true
+  enabled: false
   annotations:
     kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
@@ -28,6 +28,24 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+livenessProbe:
+  path: /api/v1/metrics
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 15
+  timeoutSeconds: 1
+  failureThreshold: 6
+  successThreshold: 1
+
+readinessProbe:
+  path: /api/v1/metrics
+  enabled: true
+  initialDelaySeconds: 15
+  periodSeconds: 15
+  timeoutSeconds: 1
+  failureThreshold: 6
+  successThreshold: 1
+
 resources:
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
@@ -37,11 +55,13 @@ resources:
     cpu: 200m
     memory: 256Mi
 
+## Node, affinity and tolerations labels for pod assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
 nodeSelector: {}
-
-tolerations: []
-
 affinity: {}
+tolerations: []
 
 env:
   DJANGO_APP_DB_ENGINE: "postgresql_psycopg2"

@@ -141,7 +141,7 @@ spec:
         {{- end }}
         volumeMounts:
         - name: custom-init-scripts
-          mountPath: /docker-entrypoint-initdb.d
+          mountPath: /gitranger-entrypoint-initdb.d
         {{- if .Values.persistence.enabled }}
         - name: data
           mountPath: /bitnami/postgresql

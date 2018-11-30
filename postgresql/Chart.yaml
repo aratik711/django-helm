@@ -12,7 +12,7 @@ keywords:
 home: https://www.postgresql.org/
 icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-110x117.png
 sources:
-- https://github.com/bitnami/bitnami-docker-postgresql
+- https://github.com/bitnami/bitnami-gitranger-postgresql
 maintainers:
 - name: Bitnami
   email: containers@bitnami.com

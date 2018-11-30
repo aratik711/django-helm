@@ -22,9 +22,9 @@ export apiPassword=rGswMtQejL7g49e
 export apiEmail=gitranger@example.com
 
 ##IMAGE variables
-export djangoImageName=aratik711/django
+export djangoImageName=arati/django
 export djangoImageTag=2.1
-export nginxImageName=aratik711/nginx
+export nginxImageName=arati/nginx
 export nginxImageTag=1.15
 
 #############################################
@@ -106,6 +106,7 @@ if [ -z $1 ]; then
   echo 'Please pass the name of the tier(db, api, proxy) to be scaled'
   exit 1
 
+
 elif [ -z $2 ]; then
 
   echo "Please pass the desired number of replicas for $1 deployment"
@@ -119,8 +120,13 @@ elif ! [ $2 -ge 1 ]; then
 else
 
   if [ "$1" = "db" ]; then
-    DEPLOYMENT=${POSTGRESQL_CHART_NAME}-postgresql-slave
-    RESOURCE=statefulset
+    if [ "$postgresqlReplication" = "false" ]; then
+        echo "No PostgreSQL slaves deployed. Replication disabled. Cannot scale."
+        exit 1
+    else
+      DEPLOYMENT=${POSTGRESQL_CHART_NAME}-postgresql-slave
+      RESOURCE=statefulset
+    fi
   elif [ "$1" = "api" ]; then
     DEPLOYMENT=${DJANGO_CHART_NAME}-django
     RESOURCE=deployment

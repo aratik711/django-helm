@@ -5,9 +5,9 @@
 replicaCount: 1
 
 image:
-  repository: aratik711/nginx
+  repository: arati/nginx
   tag: 1.15
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
 
 service:
   type: NodePort
@@ -30,20 +30,9 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #  cpu: 100m
-  #  memory: 128Mi
-  requests:
-    cpu: 200m
-    memory: 128Mi
-
 livenessProbe:
   enabled: true
+  path: /api/v1/metrics
   initialDelaySeconds: 5
   periodSeconds: 15
   timeoutSeconds: 1
@@ -52,11 +41,24 @@ livenessProbe:
 
 readinessProbe:
   enabled: true
+  path: /api/v1/metrics
   initialDelaySeconds: 15
   periodSeconds: 15
   timeoutSeconds: 1
   failureThreshold: 6
   successThreshold: 1
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
 
 ## Node, affinity and tolerations labels for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector

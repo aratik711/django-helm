@@ -8,7 +8,7 @@
 ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
 ##
 image:
-  registry: docker.io
+  registry: gitranger.io
   repository: bitnami/postgresql
   tag: 10.6.0
   ## Specify a imagePullPolicy
@@ -35,7 +35,7 @@ image:
 ##
 volumePermissions:
   image:
-    registry: docker.io
+    registry: gitranger.io
     repository: bitnami/minideb
     tag: latest
     pullPolicy: Always
@@ -90,7 +90,7 @@ postgresqlDatabase: gitranger
 
 ## initdb scripts
 ## Specify dictionnary of scripts to be run at first boot
-## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
+## Alternatively, you can put your scripts under the files/gitranger-entrypoint-initdb.d directory
 ##
 # initdbScripts:
 #   my_init_script.sh:|
@@ -194,7 +194,7 @@ metrics:
       prometheus.io/port: "9187"
     loadBalancerIP:
   image:
-    registry: docker.io
+    registry: gitranger.io
     repository: wrouesnel/postgres_exporter
     tag: v0.4.6
     pullPolicy: IfNotPresent
