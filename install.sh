@@ -22,9 +22,9 @@ export apiPassword=rGswMtQejL7g49e
 export apiEmail=gitranger@example.com
 
 ##IMAGE variables
-export djangoImageName=arati/django
+export djangoImageName=aratik711/django
 export djangoImageTag=2.1
-export nginxImageName=arati/nginx
+export nginxImageName=aratik711/nginx
 export nginxImageTag=1.15
 
 #############################################
@@ -74,7 +74,7 @@ kubectl rollout status deployment ${NGINX_CHART_NAME}-nginx --namespace $NAMESPA
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 printf "\n"
-echo "${GREEN}GitRanger API is available at http://<IP>:$apiExternalPort in the browser.
+echo "${GREEN}GitRanger API is available at http://<IP-of-your-cluster-nodes>:$apiExternalPort in the browser.
 Login with credentials $apiUser:$apiPassword ${NC}"
 printf "\n"
 

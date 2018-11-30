@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: $djangoImageName
   tag: $djangoImageTag
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 service:
   type: ClusterIP

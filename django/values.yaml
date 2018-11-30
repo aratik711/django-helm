@@ -5,9 +5,9 @@
 replicaCount: 1
 
 image:
-  repository: arati/django
+  repository: aratik711/django
   tag: 2.1
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 service:
   type: ClusterIP

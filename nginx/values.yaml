@@ -5,9 +5,9 @@
 replicaCount: 1
 
 image:
-  repository: arati/nginx
+  repository: aratik711/nginx
   tag: 1.15
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 service:
   type: NodePort
