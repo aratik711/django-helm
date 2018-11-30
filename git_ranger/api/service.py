@@ -7,8 +7,8 @@ class Service:
     def __init__(self, accesstoken):
         self.accesstoken = accesstoken
 
+    """Return status of a single pr. """
     def get_pr_data(self, org, repo, pr):
-
         pr_list = {}
         pr_data = []
         try:
@@ -26,6 +26,7 @@ class Service:
             return e
         return pr_list
 
+    """Return status of every PR status check"""
     @staticmethod
     def get_pr_status(pr, commit_status):
         pr_list = {}
@@ -40,7 +41,7 @@ class Service:
             pr_list["state"] = "MERGE_PENDING"
         return pr_list
 
-
+    """Process every pr and return it's status"""
     def process_pr_data(self, repo, pr, branch, protected=False):
         pr_list = {}
         try:
@@ -64,6 +65,9 @@ class Service:
                         pr_list["state"] = "REVIEWER_PENDING"
                     elif (len(list(review_requests[0])) == 0) and (required_approving_review_count == 0):
                         pr_list.update(self.get_pr_status(pr, commit_status))
+                    elif (branch.get_protection().required_status_checks is not None) and \
+                            (required_approving_review_count == 0):
+                        pr_list.update(self.get_pr_status(pr, commit_status))
                     else:
                         count = 0
                         for review in reviews:
@@ -73,13 +77,14 @@ class Service:
                                 pr_list.update(self.get_pr_status(pr, commit_status))
                         if count < required_approving_review_count:
                             pr_list["id"] = pr.number
-                            pr_list["state"] = "REVIEWS_PENDING"
+                            pr_list["state"] = "REVIEW_IN_PROGRESS"
                 else:
                     pr_list.update(self.get_pr_status(pr, commit_status))
         except Exception as e:
             return e
         return pr_list
 
+    """Loop through each pull request. """
     def get_pr_values(self, repo):
         pr_data = []
         pr_count = 0
@@ -99,6 +104,7 @@ class Service:
             return e
         return pr_data
 
+    """Loop through each repository. """
     def get_pr_list(self, org=None, repo=None):
         g = Github(self.accesstoken)
         prs = {}
@@ -119,6 +125,7 @@ class Service:
             return e
         return prs
 
+    """List of repositories. """
     def get_repo_list(self):
         g = Github(self.accesstoken)
         repo_list = {}
@@ -131,6 +138,7 @@ class Service:
             return e
         return repo_list
 
+    """ List of pull requests in a repository. """
     def get_pull_list(self, org, repo):
         g = Github(self.accesstoken)
         pull_list = {}

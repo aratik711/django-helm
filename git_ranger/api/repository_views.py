@@ -2,11 +2,12 @@ from .serializers import AccessTokenlistSerializer
 from .models import AccessTokenlist
 from rest_framework.decorators import api_view
 from django.http import JsonResponse
-from django.http import HttpResponse
 from .service import Service
 
 
 class Repository:
+
+    """definition to get list of repositories. """
     @api_view(["POST"])
     def get_repo_list(request, pk):
         try:

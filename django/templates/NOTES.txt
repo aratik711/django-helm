@@ -1,3 +1,9 @@
+** Please be patient while the chart is being deployed **
+
+GitRanger API can be accessed via port {{ .Values.service.port }} on the following DNS name from within your cluster:
+
+    {{ template "django.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+
 1. Get the application URL by running these commands:
 {{- if .Values.ingress.enabled }}
 {{- range .Values.ingress.hosts }}
@@ -15,5 +21,5 @@
 {{- else if contains "ClusterIP" .Values.service.type }}
   export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "django.name" . }},release={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
   echo "Visit http://127.0.0.1:8080 to use your application"
-  kubectl port-forward $POD_NAME 8080:80
+  kubectl port-forward $POD_NAME 8080:{{ .Values.service.port }}
 {{- end }}

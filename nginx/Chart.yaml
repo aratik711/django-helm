@@ -1,5 +1,13 @@
 apiVersion: v1
 appVersion: "1.0"
-description: A Helm chart for Kubernetes
+description: Chart for Nginx, Nginx is a web server which can also be used as a reverse proxy, load balancer, mail proxy and HTTP cache.
 name: nginx
 version: 0.1.0
+keywords:
+- nginx
+- proxy
+- loadbalancer
+maintainers:
+- name: Arati
+  email: aratik711@gmail.com
+

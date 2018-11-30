@@ -8,6 +8,7 @@ import re
 
 class PRStatus:
 
+    """Definition for returning list of prs and their status"""
     @api_view(["POST"])
     def get_pr_status(request, pk, organization=None, repository=None, pr=None):
         try:

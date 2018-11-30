@@ -25,28 +25,36 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
+          {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /api/v1/metrics
-              port: 80
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
-            periodSeconds: 15
+              path: {{ .Values.livenessProbe.path }}
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /api/v1/metrics
-              port: 80
-            initialDelaySeconds: 15
-            timeoutSeconds: 1
-            periodSeconds: 15
+              path: {{ .Values.readinessProbe.path }}
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- end }}
           volumeMounts:
             - name: {{ template "nginx.fullname" . }}-conf-vol
-              mountPath: /etc/nginx/nginx.conf # mount nginx-conf volume to /etc/nginx
+              mountPath: /etc/nginx/nginx.conf # mount nginx.conf volume to /etc/nginx
               subPath: nginx.conf
             - name: {{ template "nginx.fullname" . }}-default-vol
-              mountPath: /etc/nginx/conf.d/default.conf # mount nginx-conf volume to /etc/nginx
+              mountPath: /etc/nginx/conf.d/default.conf # mount default.conf volume to /etc/nginx
               subPath: default.conf
             - name: log
               mountPath: /var/log/nginx
@@ -55,13 +63,13 @@ spec:
       volumes:
         - name: {{ template "nginx.fullname" . }}-conf-vol
           configMap:
-            name: {{ template "nginx.fullname" . }}-conf # place ConfigMap `nginx-conf` on /etc/nginx
+            name: {{ template "nginx.fullname" . }}-conf
             items:
             - key: nginx.conf
               path: nginx.conf
         - name: {{ template "nginx.fullname" . }}-default-vol
           configMap:
-            name: {{ template "nginx.fullname" . }}-default # place ConfigMap `nginx-conf` on /etc/nginx
+            name: {{ template "nginx.fullname" . }}-default
             items:
             - key: default.conf
               path: default.conf
