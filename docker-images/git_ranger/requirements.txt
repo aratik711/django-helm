@@ -4,7 +4,7 @@ Deprecated==1.2.4
 django>=2.1.5
 django-prometheus==1.0.15
 django-reset-migrations==0.3.1
-djangorestframework==3.9.0
+djangorestframework>=3.9.1
 idna==2.7
 prometheus-client==0.4.2
 psycopg2==2.7.6.1
