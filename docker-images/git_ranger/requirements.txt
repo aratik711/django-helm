@@ -10,7 +10,7 @@ prometheus-client==0.4.2
 psycopg2==2.7.6.1
 psycopg2-binary==2.7.6.1
 PyGithub==1.43.3
-PyJWT==1.6.4
+PyJWT==2.4.0
 pytz==2018.7
 requests==2.20.1
 urllib3>=1.24.2
